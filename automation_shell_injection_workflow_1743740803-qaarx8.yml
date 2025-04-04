@@ -1,4 +1,4 @@
-name: Insecure Shell Execution Workflow
+name: automation_shell_injection_workflow_1743740803-qaarx8
 
 on:
   issue_comment:
