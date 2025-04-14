@@ -8,13 +8,27 @@ on:
         required: true
         type: string
 
+permissions: write-all  # ❌ Dangerous: Grants full write access
+
 jobs:
-  run_untrusted_command:
+  insecure-job:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Execute Untrusted Command
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # Required for pushing changes
+
+      - name: Modify code and commit changes
         run: |
-          echo "Executing: ${{ inputs.command }}"
-          eval "${{ inputs.command }}"
+          echo "Modified by GitHub Actions" >> modified-file.txt
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add modified-file.txt
+          git commit -m "Automated commit from GitHub Actions"
+      
+      - name: Push changes
+        run: |
+          git push origin main
 
